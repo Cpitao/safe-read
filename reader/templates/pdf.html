@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="links-container">
+            <a href="/shelf/{{ name }}" class="btn btn-link">Back to Shelf</a>
+            <a href="/home" class="btn btn-link">Back to Home</a>
+        </div>
+
+        <div class="pdf-container">
+            <embed id="pdf-viewer" type="application/pdf" width="100%" height="100%" />
+        </div>
+    </div>
+
+    <script src="/static/encrypt.js"></script>
+
+    <script>
+        const pathname = window.location.pathname;
+        const segments = pathname.split('/');
+        const name = segments[2];
+        const doc = segments[3];
+        let keyHex = localStorage.getItem(`${name}-key`);
+        async function decryptPDF() {
+            let key = await window.crypto.subtle.importKey(
+                "raw",
+                hexToByteArray(keyHex),
+                "AES-CBC",
+                false,
+                ["encrypt", "decrypt"]
+            );
+            fetch(`/shelf/${name}/${doc}/iv`)
+                .then(response => response.json())
+                .then(data => {
+                    const iv = data.iv;
+                    fetch(`/shelf/${name}/${doc}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch the file');
+                            }
+                            return response.arrayBuffer();
+                        })
+                        .then(arrayBuffer => {
+                            return decryptFile(hexToByteArray(doc), arrayBuffer, key, hexToByteArray(iv));
+                        })
+                        .then(file => {
+                            console.log(file);
+                            document.getElementById('pdf-viewer').src = URL.createObjectURL(file);
+                    });
+                });
+        }
+
+        decryptPDF();
+
+
+    </script>
+</body>
+</html>

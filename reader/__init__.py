@@ -2,14 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
-
 db = SQLAlchemy()
 
 
 def create_app():
     app = Flask(__name__, template_folder='templates')
-    app.config['SECRET_KEY'] = 'SECRET_KEY_THIS_IS' #  @TODO later
+    app.config['SECRET_KEY'] = 'SECRET_KEY_THIS_IS'  # @TODO later
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reader.db'
+    app.config['UPLOAD_FOLDER'] = 'uploads'
 
     db.init_app(app)
 
@@ -18,6 +18,7 @@ def create_app():
     login_manager.init_app(app)
 
     from .models import User
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))

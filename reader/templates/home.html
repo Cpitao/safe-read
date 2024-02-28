@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Your shelves</h1>
+        <hr>
+        <div class="shelves-container">
+            {% if shelves %}
+                {% for shelf in shelves %}
+                    <div class="shelf" onclick="location.href='/shelf/{{ shelf.name }}'">
+                        <div class="shelf-tile">
+                            <h3>{{ shelf.name }}</h3>
+                            <p class="description">{{ shelf.description }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+            {% endif %}
+        </div>
+        <div id="create-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add new shelf</h2>
+                <form onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label for="shelfName">Shelf Name</label>
+                        <input type="text" id="shelfName" name="shelfName" placeholder="Enter shelf name">
+                    </div>
+                    <div class="form-group">
+                        <label for="shelfDescription">Description</label>
+                        <textarea id="shelfDescription" name="shelfDescription" placeholder="Enter shelf description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="shelfPassword">Shelf password</label>
+                        <input type="password" id="shelfPassword" name="shelfPassword">
+                    </div>
+                    <input type="hidden" id="username" name="username" value="{{current_user.username}}">
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+        </div>
+        <button id="create-shelf-btn">Add new shelf</button>
+    </div>
+
+    <script>
+        document.getElementById('create-shelf-btn').addEventListener('click', function() {
+            document.getElementById('create-modal').style.display = 'block';
+            document.querySelector('.container').classList.add('blur');
+        });
+
+        document.querySelector('.modal .close').addEventListener('click', function() {
+            document.getElementById('create-modal').style.display = 'none';
+            document.querySelector('.container').classList.remove('blur');
+        });
+
+        window.addEventListener('click', function(event) {
+            var modal = document.getElementById('create-modal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                document.querySelector('.container').classList.remove('blur');
+            }
+        });
+
+
+
+        async function submitForm(event) {
+            event.preventDefault();
+
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('shelfPassword').value;
+            let key = await pwdToKey(username, password);
+            let exportedKey = toHexString(await window.crypto.subtle.exportKey("raw", key));
+            let shelfName = document.getElementById('shelfName').value;
+
+            var formData = new FormData();
+            formData.append('shelfName', document.getElementById('shelfName').value);
+            formData.append('shelfDescription', document.getElementById('shelfDescription').value);
+
+            fetch('/shelf', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorMessage => {
+                        displayErrorMessage(errorMessage);
+                    });
+                } else {
+                    localStorage.setItem(`${shelfName}-key`, exportedKey);
+                    window.location = '/home';
+                }
+            });
+
+        }
+
+        function displayErrorMessage(message) {
+            var existingErrorMessage = document.querySelector('.notification.is-danger');
+            if (existingErrorMessage) {
+                existingErrorMessage.parentNode.removeChild(existingErrorMessage);
+            }
+
+            var notificationDiv = document.createElement('div');
+            notificationDiv.classList.add('notification', 'is-danger');
+            notificationDiv.textContent = message;
+
+            var form = document.querySelector('form');
+            form.parentNode.insertBefore(notificationDiv, form.nextSibling);
+        }
+    </script>
+    <script src="/static/encrypt.js"></script>
+</body>
+</html>

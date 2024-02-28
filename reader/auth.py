@@ -44,6 +44,8 @@ def login():
             if user.check_password(password):
                 login_user(user)
                 return redirect(url_for('main.home'))
+        flash("Invalid username or password")
+        return render_template('login.html')
     else:
         return render_template('login.html')
 

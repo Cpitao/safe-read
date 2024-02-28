@@ -1,20 +1,43 @@
-.index-container {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 5px;
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 80%;
+    height: 80%;
+    margin: 10% auto;
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-.index-container h2 {
+
+h1, h2, h3 {
     margin-bottom: 20px;
 }
 
-.links-container {
-    display: flex;
-    justify-content: center;
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .btn {
@@ -30,4 +53,245 @@
 
 .btn:hover {
     background-color: #0056b3;
+}
+
+.notification {
+    width: calc(100% - 20px);
+    color: white;
+    text-align: center;
+    padding: 10px 0px;
+    margin-bottom: 20px;
+}
+
+.is-danger {
+    background-color: #f44336;
+}
+
+.is-safe {
+    background-color: forestgreen;
+}
+
+.signup-link {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.signup-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.shelves-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.shelf {
+    width: calc(25% - 10px);
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.shelf-tile {
+    padding: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.shelf:hover .shelf-tile {
+    background-color: #e0e0e0;
+}
+
+.shelf h3 {
+    margin-top: 0;
+}
+
+.description {
+    display: none;
+}
+
+.shelf:hover .description {
+    display: block;
+}
+
+#create-shelf-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#create-shelf-btn:hover {
+    background-color: #0056b3;
+}
+
+#create-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    max-width: 400px;
+    width: 80%;
+    height: 50%;
+    overflow-y: auto;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+textarea {
+    height: 100px;
+}
+
+button[type="submit"] {
+    display: inline-block;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+    height: 80%;
+}
+
+#fileInput {
+    display: none;
+}
+
+.pdfs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.pdf-tile {
+    width: calc(20% - 20px);
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.pdf-tile h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.links-container {
+    padding: 10px;
+    text-align: center;
+}
+
+.pdf-container {
+    flex-grow: 1;
+    height: 90%;
+}
+
+.home-button {
+    display: flex;
+    align-items: center;
+}
+
+.description,
+.author {
+    margin-bottom: 5px;
+}
+
+.description {
+    font-style: italic;
+}
+
+.author {
+    font-weight: bold;
+}
+
+#upload-button {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#upload-button:hover {
+    background-color: #0056b3;
+}
+
+.shelf-container {
+    position: relative;
 }

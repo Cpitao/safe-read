@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../static/styles.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
     <div class="login-container">
         <h2>Login</h2>
-
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="notification is-danger">{{ messages[0] }}</div>
+                {% if messages[0].startswith('Success') %}
+                    <div class="notification is-safe">{{ messages[0] }}</div>
+                {% else %}
+                    <div class="notification is-danger">{{ messages[0] }}</div>
+                {% endif %}
             {% endif %}
         {% endwith %}
 
@@ -25,8 +28,11 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <input type="submit" value="Login" class="btn btn-submit">
+            <input type="submit" value="Log in" class="btn btn-submit">
         </form>
+        <div class="signup-link">
+            Don't have an account yet? <a href="/signup">Sign up now</a>
+        </div>
     </div>
 </body>
 </html>
