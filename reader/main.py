@@ -9,17 +9,13 @@ from . import db
 from .models import Shelf, Document
 
 main = Blueprint('main', __name__)
-UPLOADS = "C:\\Users\\Piotr\\PycharmProjects\\SafeRead\\backend\\uploads"
+UPLOADS = "~/uploads"
 
 
 @main.route('/shelf/<name>/<doc>', methods=['POST'])
 @jwt_required()
 def upload_file(name, doc):
     file = request.files['file']
-    # iv = request.form['iv']
-    # if not iv:
-    #     return {"err": "Invalid request, try again"}, 400
-
     owner = get_jwt_identity()
     shelf = db.session.query(Shelf).filter_by(owner=owner) \
         .filter_by(name=name).first()
@@ -36,7 +32,6 @@ def upload_file(name, doc):
         document = Document(title=doc, shelf_id=shelf.id)
         db.session.add(document)
 
-        # Save file
         if not os.path.isdir(UPLOADS):
             os.mkdir(UPLOADS)
         if not os.path.isdir(f'{UPLOADS}/{owner}'):
@@ -124,9 +119,3 @@ def documents(name):
     shelf = db.session.query(Shelf).filter_by(owner=owner).filter_by(name=name).first()
     docs = db.session.query(Document).filter_by(shelf_id=shelf.id).all()
     return jsonify([{"title": doc.title} for doc in docs])
-
-@main.route('/test', methods=['GET'])
-def test():
-    import time
-    time.sleep(5)
-    return send_file('pan-tadeusz.pdf')
